@@ -12,7 +12,8 @@ services:
      ports:
        - "8000:8000"
      depends_on:
-       - db
+       db:
+         condition: service_started
      environment:
        - POSTGRES_USER=root
        - POSTGRES_PASSWORD=example
@@ -35,10 +36,9 @@ services:
        POSTGRES_PASSWORD: example
        POSTGRES_DB: test_db
      healthcheck:
-     	test: ["CMD-SHELL", "pg_isready -U postgres"]
-     	interval: 5s
-     	timeout: 5s
-     	retries: 5
+        test: ["CMD-SHELL", "pg_isready", "--quiet"]
+        interval: 5s
+        timeout: 5s
 networks:
   amtelnet:
-     name: amtel
+     driver: bridge
