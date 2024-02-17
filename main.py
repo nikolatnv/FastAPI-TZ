@@ -9,7 +9,7 @@ import uuid
 from aiofile import async_open
 
 # Подключение к базе данных PostgreSQL
-SQLALCHEMY_DATABASE_URL = "postgresql://root:example@postgres/test_db"
+SQLALCHEMY_DATABASE_URL = "postgresql://root:example@db/test_db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 # Создание сессии SQLAlchemy
