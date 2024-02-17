@@ -1,10 +1,32 @@
+#version: '3.1'
+#
+#services:
+#
+#  db:
+#    build: ./db
+#    restart: always
+#    environment:
+#      POSTGRES_USER: root
+#      POSTGRES_PASSWORD: example
+#      POSTGRES_DB: test_db
+#    ports:
+#     - "5432:5432"
+#    volumes:
+#     - ./database:/lib/var/postgresql/data
+#
+#  adminer:
+#    build: ./adminer
+#    restart: always
+#    ports:
+#      - 8060:8080
+#
+#
 version: '3.8'
 
 services:
    app:
      build: .
      image: basay/amtel:latest
-     container_name: app_amtel
      command: uvicorn main:app --host 0.0.0.0 --port 8000
      networks:
        - amtelnet
@@ -13,19 +35,17 @@ services:
      ports:
        - "8000:8000"
      depends_on:
-       db:
-         condition: service_healthy
+       - postgres
      environment:
        - POSTGRES_USER=root
        - POSTGRES_PASSWORD=example
        - POSTGRES_DB=test_db
 
 
-   db:
+   postgres:
      image: postgres:latest
-     container_name: db_amtel
      restart: always
-     hostname: db
+     hostname: postgres
      networks:
        - amtelnet
      volumes:
@@ -36,11 +56,6 @@ services:
        POSTGRES_USER: root
        POSTGRES_PASSWORD: example
        POSTGRES_DB: test_db
-     healthcheck:
-       test: ["CMD-SHELL", "pg_isready -U postgres"]
-       interval: 5s
-       timeout: 5s
-       retries: 5
 networks:
   amtelnet:
-     driver: bridge
+     name: amtel
