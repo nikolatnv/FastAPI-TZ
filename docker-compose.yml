@@ -13,7 +13,7 @@ services:
        - "8000:8000"
      depends_on:
        db:
-         condition: service_started
+         condition: service_healthy
      environment:
        - POSTGRES_USER=root
        - POSTGRES_PASSWORD=example
@@ -36,7 +36,7 @@ services:
        POSTGRES_PASSWORD: example
        POSTGRES_DB: test_db
      healthcheck:
-        test: ["CMD-SHELL", "pg_isready", "--quiet"]
+        test: ["CMD-SHELL", "pg_isready -U root -d test_db"]
         interval: 5s
         timeout: 5s
 networks:
